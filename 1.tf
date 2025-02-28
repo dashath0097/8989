@@ -24,6 +24,8 @@ resource "aws_instance" "spacelift_worker" {
 
   user_data = templatefile("${path.module}/user_data.sh", {
     WORKER_POOL_ID = spacelift_worker_pool.private_workers.id
+    SPACELIFT_ACCESS_KEY = var.spacelift_access_key
+    SPACELIFT_SECRET_KEY = var.spacelift_secret_key
   })
 }
 
