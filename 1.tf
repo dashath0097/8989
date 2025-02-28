@@ -28,10 +28,11 @@ resource "aws_instance" "spacelift_worker" {
     Name = "Spacelift-Worker-${count.index}"
   }
 
- user_data = base64encode(templatefile("${path.module}/user_data.sh", {
+user_data = base64encode(templatefile("${path.module}/user_data.sh", {
   WORKER_POOL_ID       = spacelift_worker_pool.private_workers.id
   SPACELIFT_ACCESS_KEY = var.spacelift_access_key
 }))
+
 
 }
 
