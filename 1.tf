@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "spacelift" {
-  api_key    = var.spacelift_access_key
-  api_secret = var.spacelift_secret_key
+  # Spacelift API credentials (configure via environment variables)
 }
+
 
 resource "spacelift_worker_pool" "private_workers" {
   name        = "private-worker-pool"
