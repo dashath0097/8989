@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    spacelift = {
+      source  = "spacelift-io/spacelift"
+      version = "~> 1.20.0"
+    }
+  }
+}
+
 provider "spacelift" {
   api_key    = var.spacelift_access_key
   api_secret = var.spacelift_secret_key
@@ -70,7 +79,7 @@ openssl req -new -newkey rsa:2048 -nodes -keyout /root/worker.key -out /root/wor
 # Upload CSR and retrieve signed certificate
 WORKER_POOL_ID="${WORKER_POOL_ID}"
 curl -X POST -H "Authorization: Bearer ${SPACELIFT_ACCESS_KEY}" -H "Content-Type: application/json" \
-    --data '{"csr": "'$(cat /root/worker.csr | base64)'", "worker_pool_id": "'${WORKER_POOL_ID}'"}' \
+    --data '{"csr": "'$(base64 /root/worker.csr)'", "worker_pool_id": "'${WORKER_POOL_ID}'"}' \
     https://api.spacelift.io/v2/worker-pools/${WORKER_POOL_ID}/certificate > /root/worker.crt
 
 # Download and configure Spacelift Launcher
