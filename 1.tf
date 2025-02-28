@@ -8,8 +8,7 @@ terraform {
 }
 
 provider "spacelift" {
-  api_key    = var.spacelift_access_key
-  api_secret = var.spacelift_secret_key
+  
 }
 
 resource "spacelift_worker_pool" "private_workers" {
