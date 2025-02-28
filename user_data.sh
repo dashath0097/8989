@@ -6,8 +6,9 @@ apt update -y
 apt install -y curl wget openssl jq
 
 # Verify required environment variables
-SPACELIFT_ACCESS_KEY=${SPACELIFT_ACCESS_KEY:-}
-WORKER_POOL_ID=${WORKER_POOL_ID:-}
+SPACELIFT_ACCESS_KEY=$${SPACELIFT_ACCESS_KEY:-}
+WORKER_POOL_ID=$${WORKER_POOL_ID:-}
+
 
 if [ -z "$SPACELIFT_ACCESS_KEY" ]; then
   echo "Error: SPACELIFT_ACCESS_KEY is not set!"
