@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "spacelift" {
-  # Spacelift API credentials (configure via environment variables)
+  api_key    = var.spacelift_access_key
+  api_secret = var.spacelift_secret_key
 }
-
 
 resource "spacelift_worker_pool" "private_workers" {
   name        = "private-worker-pool"
@@ -78,9 +78,11 @@ openssl req -new -newkey rsa:2048 -nodes -keyout /root/worker.key -out /root/wor
 
 # Upload CSR and retrieve signed certificate
 WORKER_POOL_ID="${WORKER_POOL_ID}"
-curl -X POST -H "Authorization: Bearer ${SPACELIFT_ACCESS_KEY}" -H "Content-Type: application/json" \
+CERT_RESPONSE=$(curl -X POST -H "Authorization: Bearer ${SPACELIFT_ACCESS_KEY}" -H "Content-Type: application/json" \
     --data '{"csr": "'$(base64 /root/worker.csr)'", "worker_pool_id": "'${WORKER_POOL_ID}'"}' \
-    https://api.spacelift.io/v2/worker-pools/${WORKER_POOL_ID}/certificate > /root/worker.crt
+    https://api.spacelift.io/v2/worker-pools/${WORKER_POOL_ID}/certificate)
+
+echo "$CERT_RESPONSE" | jq -r .certificate > /root/worker.crt
 
 # Download and configure Spacelift Launcher
 curl -Lo /usr/local/bin/spacelift-launcher https://downloads.spacelift.io/spacelift-launcher-x86_64
