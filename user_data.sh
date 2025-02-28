@@ -1,11 +1,19 @@
 #!/bin/bash
-set -euxo pipefail  # Improve debugging & error handling
+set -euxo pipefail  # Enable strict debugging
+
+# Export variables explicitly to ensure availability
+export SPACELIFT_ACCESS_KEY="${SPACELIFT_ACCESS_KEY}"
+export WORKER_POOL_ID="${WORKER_POOL_ID}"
+
+# Log the values (useful for debugging, remove if needed)
+echo "SPACELIFT_ACCESS_KEY: ${SPACELIFT_ACCESS_KEY}"
+echo "WORKER_POOL_ID: ${WORKER_POOL_ID}"
 
 # Install required dependencies
 apt update -y
 apt install -y curl wget openssl jq
 
-# Verify required environment variables
+# Check if variables are set
 if [[ -z "${SPACELIFT_ACCESS_KEY}" ]]; then
   echo "Error: SPACELIFT_ACCESS_KEY is not set!"
   exit 1
