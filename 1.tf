@@ -19,10 +19,10 @@ provider "aws" {
 }
 
 resource "aws_instance" "spacelift_worker" {
-  count         = var.worker_count
-  ami           = var.ami_id
-  instance_type = "t3.medium"
-  iam_instance_profile = aws_iam_instance_profile.worker_profile.name
+  count                  = var.worker_count
+  ami                    = var.ami_id
+  instance_type          = "t3.medium"
+  iam_instance_profile   = data.aws_iam_instance_profile.worker_profile.name
 
   tags = {
     Name = "Spacelift-Worker-${count.index}"
@@ -39,9 +39,9 @@ data "aws_iam_role" "worker_role" {
   name = "SpaceliftWorkerRole"
 }
 
-resource "aws_iam_instance_profile" "worker_profile" {
+# Fetch existing IAM instance profile instead of creating a new one
+data "aws_iam_instance_profile" "worker_profile" {
   name = "SpaceliftWorkerProfile"
-  role = data.aws_iam_role.worker_role.name
 }
 
 variable "spacelift_access_key" {}
