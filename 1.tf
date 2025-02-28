@@ -29,10 +29,19 @@ resource "aws_instance" "spacelift_worker" {
   }
 
 user_data_replace_on_change = true
-user_data = templatefile("${path.module}/user_data.sh", {
-  WORKER_POOL_ID       = spacelift_worker_pool.private_workers.id
-  SPACELIFT_ACCESS_KEY = var.spacelift_access_key
-})
+user_data = <<-EOF
+#!/bin/bash
+set -eux
+
+# Inject environment variables
+echo "export SPACELIFT_ACCESS_KEY=${var.spacelift_access_key}" >> /etc/profile
+echo "export WORKER_POOL_ID=${spacelift_worker_pool.private_workers.id}" >> /etc/profile
+source /etc/profile
+
+# Run user_data script
+bash /root/user_data.sh
+EOF
+
 
 
 }
