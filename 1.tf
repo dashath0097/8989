@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "spacelift_worker" {
-  count                  = var.worker_count
+  count                  = 1
   ami                    = var.ami_id
   instance_type          = "t3.medium"
   iam_instance_profile   = data.aws_iam_instance_profile.worker_profile.name
